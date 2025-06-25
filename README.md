@@ -5,7 +5,7 @@ Tomato is a full-stack food delivery application where users can browse a rich m
 ### 🚀 Live Demo
 
 - **Frontend:** [food-del-frontend-seay.onrender.com](https://food-del-frontend-seay.onrender.com)
-- **Backend API:** [food-del-admin-3m1r.onrender.com](https://food-del-admin-3m1r.onrender.com)
+- **Admin:** [food-del-admin-3m1r.onrender.com](https://food-del-admin-3m1r.onrender.com)
 
 ---
 
@@ -33,21 +33,16 @@ Tomato is a full-stack food delivery application where users can browse a rich m
 ---
 
 ## 📷 Screenshots
+<img width="1470" alt="Screenshot 2025-06-26 at 12 56 09 AM" src="https://github.com/user-attachments/assets/bff42490-51de-4be7-a68a-2245d608bc59" />
 
-<details>
-  <summary>🏠 Home & Menu Page</summary>
-  <img src="Screenshot 2025-06-26 at 12.56.09 AM" width="600"/>
-</details>
+<img width="1470" alt="Screenshot 2025-06-26 at 12 56 16 AM" src="https://github.com/user-attachments/assets/ce37c619-67ee-40ed-9383-561371ef0b9c" />
 
-<details>
-  <summary>🛒 Cart Page</summary>
-  <img src="screenshots/cart.png" width="600"/>
-</details>
+<img width="1470" alt="Screenshot 2025-06-26 at 12 56 32 AM" src="https://github.com/user-attachments/assets/5a1ac445-07b5-4c8f-b090-887ec046cbfd" />
 
-<details>
-  <summary>📦 Orders Page</summary>
-  <img src="screenshots/orders.png" width="600"/>
-</details>
+<img width="1470" alt="Screenshot 2025-06-26 at 12 56 40 AM" src="https://github.com/user-attachments/assets/aed1ceb9-b093-4fac-8d56-9fcad0eed9e7" />
+
+
+
 
 ---
 
