@@ -27,8 +27,8 @@ Tomato is a full-stack food delivery application where users can browse a rich m
 | **Frontend** | HTML, CSS, JavaScript, ReactJS |
 | **Backend** | Node.js, Express.js |
 | **Payments** | Stripe API |
-| **Database** | MongoDB (if used in backend) |
-| **Deployment** | Render (Frontend & Backend) |
+| **Database** | MongoDB |
+| **Deployment** | Render |
 
 ---
 
