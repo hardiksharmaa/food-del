@@ -36,7 +36,7 @@ Tomato is a full-stack food delivery application where users can browse a rich m
 
 <details>
   <summary>🏠 Home & Menu Page</summary>
-  <img src="screenshots/home-menu.png" width="600"/>
+  <img src="Screenshot 2025-06-26 at 12.56.09 AM" width="600"/>
 </details>
 
 <details>
@@ -72,6 +72,7 @@ npm run dev
 
 💳 Payments with Stripe
 Integrates Stripe Checkout for secure and fast payments.
+
 Make sure your Stripe keys are valid and properly stored in your .env.
 
 📁 Folder Structure
@@ -89,7 +90,9 @@ This project is licensed under the MIT License.
 If you like this project or want to connect:
 
 👤 Hardik Sharma
+
 📧 hs489819@gmail.com
+
 🌐 LinkedIn | GitHub
 
 
