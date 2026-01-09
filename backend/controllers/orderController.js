@@ -6,9 +6,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 //config variables
 const currency = "inr";
 const deliveryCharge = 50;
-const frontend_URL = 'https://food-del-frontend-seay.onrender.com';
+const frontend_URL = process.env.FRONTEND_URL || 'https://food-del-frontend-seay.onrender.com';
 
-// Placing User Order for Frontend using stripe
 const placeOrder = async (req, res) => {
 
     try {
@@ -50,6 +49,9 @@ const placeOrder = async (req, res) => {
             mode: 'payment',
         });
 
+        // Save Stripe session ID to order for verification
+        await orderModel.findByIdAndUpdate(newOrder._id, { stripeSessionId: session.id });
+
         res.json({ success: true, session_url: session.url });
 
     } catch (error) {
@@ -58,7 +60,6 @@ const placeOrder = async (req, res) => {
     }
 }
 
-// Placing User Order for Frontend using stripe
 const placeOrderCod = async (req, res) => {
 
     try {
@@ -116,16 +117,45 @@ const updateStatus = async (req, res) => {
 const verifyOrder = async (req, res) => {
     const { orderId, success } = req.body;
     try {
-        if (success === "true") {
-            await orderModel.findByIdAndUpdate(orderId, { payment: true });
-            res.json({ success: true, message: "Paid" })
+        // Find the order
+        const order = await orderModel.findById(orderId);
+        if (!order) {
+            return res.json({ success: false, message: "Order not found" });
         }
-        else {
-            await orderModel.findByIdAndDelete(orderId)
-            res.json({ success: false, message: "Not Paid" })
+
+        // If order already verified, return success
+        if (order.payment === true) {
+            return res.json({ success: true, message: "Order already verified" });
+        }
+
+        // If user cancelled, delete the order
+        if (success !== "true") {
+            await orderModel.findByIdAndDelete(orderId);
+            return res.json({ success: false, message: "Payment cancelled" });
+        }
+
+        // Verify payment with Stripe API using session ID
+        if (!order.stripeSessionId) {
+            // If no session ID, this might be an old order or COD order
+            // For security, don't mark as paid without verification
+            return res.json({ success: false, message: "Cannot verify payment - no session ID" });
+        }
+
+        // Retrieve the Stripe session to verify payment status
+        const session = await stripe.checkout.sessions.retrieve(order.stripeSessionId);
+        
+        // Only mark as paid if Stripe confirms payment was successful
+        if (session.payment_status === 'paid') {
+            await orderModel.findByIdAndUpdate(orderId, { payment: true });
+            res.json({ success: true, message: "Payment verified" });
+        } else {
+            // Payment not completed, delete the order
+            await orderModel.findByIdAndDelete(orderId);
+            res.json({ success: false, message: "Payment not completed" });
         }
     } catch (error) {
-        res.json({ success: false, message: "Not  Verified" })
+        console.error("Order verification error:", error);
+        res.json({ success: false, message: "Verification failed" });
     }
 
 }

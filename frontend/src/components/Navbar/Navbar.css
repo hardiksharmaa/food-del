@@ -147,3 +147,44 @@ position: relative;
         display: none;
     }
 }
+
+/* Navbar.css */
+
+/* The Glass/Water Style */
+.glass-water-item {
+  background: rgba(255, 255, 255, 0.1); /* Very transparent white */
+  backdrop-filter: blur(10px);           /* The "frosted glass" blur */
+  -webkit-backdrop-filter: blur(10px);   /* Safari support */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Shiny edge */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle depth */
+  border-radius: 50px;                   /* Pill/Droplet shape */
+  padding: 8px 20px;                     /* Spacing inside the bubble */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #49557E;                        /* Keep your text color */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Adjust the active state specifically for this new look */
+.navbar-menu .active {
+  background: rgba(255, 76, 36, 0.1); /* Faint orange tint */
+  border-color: rgba(255, 76, 36, 0.4);
+  /* Remove the old underline style if it conflicts */
+  padding-bottom: 8px; 
+  border-bottom: 1px solid rgba(255, 76, 36, 0.4);
+}
+
+/* Specific adjustment for the icons to make them round bubbles */
+.icon-bubble {
+  padding: 10px;
+  border-radius: 50%; /* Perfect circle */
+  width: 45px;
+  height: 45px;
+}
+
+/* Ensure the layout handles the new padding */
+.navbar-menu {
+  gap: 15px; /* Slightly reduce gap since items have padding now */
+}
