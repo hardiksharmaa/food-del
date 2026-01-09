@@ -51,7 +51,7 @@ const registerUser = async (req,res) => {
         }
 
         // hashing user password
-        const salt = await bcrypt.genSalt(10); // the more no. round the more time it will take
+        const salt = await bcrypt.genSalt(10); 
         const hashedPassword = await bcrypt.hash(password, salt)
 
         const newUser = new userModel({name, email, password: hashedPassword})

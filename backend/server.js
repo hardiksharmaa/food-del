@@ -7,6 +7,19 @@ import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
 
+// Validate required environment variables
+const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET', 'STRIPE_SECRET_KEY'];
+const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+
+if (missingEnvVars.length > 0) {
+    console.error("ERROR: Missing required environment variables:");
+    missingEnvVars.forEach(envVar => {
+        console.error(`  - ${envVar}`);
+    });
+    console.error("\nPlease set these variables in your .env file");
+    process.exit(1);
+}
+
 // app config
 const app = express()
 const port = process.env.PORT || 4000;
