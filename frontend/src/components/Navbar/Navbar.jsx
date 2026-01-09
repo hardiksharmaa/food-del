@@ -8,14 +8,16 @@ import { StoreContext } from '../../Context/StoreContext'
 const Navbar = ({ setShowLogin }) => {
 
   const [menu, setMenu] = useState("home");
-  const { getTotalCartAmount, token ,setToken, cartItems } = useContext(StoreContext);
+  const { getTotalCartAmount, token, setToken, cartItems, setSearchTerm } = useContext(StoreContext);
   const navigate = useNavigate();
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const [showSearch, setShowSearch] = useState(false);
 
-  useEffect(() => {
-    const total = getTotalCartAmount();
-    setCartItemCount(total);
-  }, [cartItems, getTotalCartAmount]);
+  // Handle search logic
+  const handleSearch = (e) => setSearchTerm(e.target.value);
+  const handleSearchClick = () => {
+    setShowSearch(!showSearch);
+    if (showSearch) setSearchTerm("");
+  }
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -23,47 +25,95 @@ const Navbar = ({ setShowLogin }) => {
     navigate('/')
   }
 
-  // Define a "Liquid" spring transition for reusability
-  const liquidTransition = { type: "spring", stiffness: 400, damping: 10 };
+  // --- NEW FUNCTION: Scroll to Top ---
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // --- NEW LOGIC: Sync Menu with Scroll Position ---
+  useEffect(() => {
+    const handleScroll = () => {
+      // Get the DOM elements by their ID (ensure these IDs exist in your other components)
+      const menuSection = document.getElementById('explore-menu');
+      const appSection = document.getElementById('app-download');
+      const footerSection = document.getElementById('footer');
+
+      // Current scroll position + a buffer (approx navbar height) so it activates early
+      const scrollPosition = window.scrollY + 150; 
+
+      // Check positions from bottom to top to prioritize the furthest section reached
+      if (footerSection && scrollPosition >= footerSection.offsetTop) {
+        setMenu("contact");
+      } else if (appSection && scrollPosition >= appSection.offsetTop) {
+        setMenu("mob-app");
+      } else if (menuSection && scrollPosition >= menuSection.offsetTop) {
+        setMenu("menu");
+      } else {
+        setMenu("home");
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []); // Empty dependency array means this runs on mount
+
+  // Animation Configs
+  const liquidTransition = { type: "spring", stiffness: 300, damping: 20 };
 
   return (
     <motion.div 
       className='navbar'
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, type: "spring" }}
     >
-      {/* 1. Logo remains untouched (No glass effect) */}
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+      {/* 1. Logo with bounce effect */}
+      <motion.div 
+        whileHover={{ scale: 1.05 }} 
+        whileTap={{ scale: 0.95 }}
+        onClick={scrollToTop} 
       >
         <Link to='/'><img className='logo' src={assets.logo} alt="" /></Link>
       </motion.div>
 
-      {/* 2. Menu Items with Glass Effect */}
+      {/* 2. Menu with "Sliding Pill" Animation */}
       <ul className="navbar-menu">
         {['home', 'menu', 'mob-app', 'contact'].map((item) => {
-           // Helper to map state names to href/to
            const isLink = item === 'home';
            const path = isLink ? '/' : `#${item === 'mob-app' ? 'app-download' : item === 'menu' ? 'explore-menu' : 'footer'}`;
            const label = item === 'mob-app' ? 'mobile app' : item === 'contact' ? 'contact us' : item;
-           
-           // Wrap logic to decide between Link or <a>
            const Component = isLink ? Link : 'a';
+           const isActive = menu === item;
 
            return (
              <Component 
                key={item}
                to={isLink ? path : undefined} 
                href={!isLink ? path : undefined}
-               onClick={() => setMenu(item)} 
-               className={`glass-water-item ${menu === item ? "active" : ""}`}
+               onClick={() => {
+                   setMenu(item);
+                   if (item === 'home') scrollToTop();
+               }} 
+               className={`glass-water-item ${isActive ? "active-text" : ""}`}
+               style={{ position: 'relative' }} 
              >
-                <motion.span
-                   whileHover={{ scale: 1.05 }}
-                   whileTap={{ scale: 0.95 }}
-                   transition={liquidTransition}
+                {/* The Magic Sliding Background */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activePill"
+                    className="active-pill"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                
+                {/* The Text Label */}
+                <motion.span 
+                  style={{ position: 'relative', zIndex: 1 }} 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {label}
                 </motion.span>
@@ -72,22 +122,48 @@ const Navbar = ({ setShowLogin }) => {
         })}
       </ul>
 
+      {/* 3. Right Side Icons */}
       <div className="navbar-right">
-        {/* 3. Search Icon Bubble */}
-        <motion.div 
-          className="glass-water-item icon-bubble"
-          whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.3)" }}
-          whileTap={{ scale: 0.9 }}
-          transition={liquidTransition}
-        >
-          <img src={assets.search_icon} alt="" />
-        </motion.div>
+        
+        {/* Search Section */}
+        <div className="search-container" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+            <AnimatePresence>
+                {showSearch && (
+                    <motion.input
+                        initial={{ width: 0, opacity: 0, x: 20 }}
+                        animate={{ width: "180px", opacity: 1, x: 0 }}
+                        exit={{ width: 0, opacity: 0, x: 20 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        type="text"
+                        placeholder="Search..."
+                        onChange={handleSearch}
+                        className="glass-water-item search-input-glass"
+                        style={{ 
+                            marginRight: '8px', 
+                            padding: "10px 15px",
+                            outline: 'none',
+                            color: '#49557E'
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+            
+            <motion.div 
+              className="glass-water-item icon-bubble"
+              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.8)" }}
+              whileTap={{ scale: 0.9 }}
+              transition={liquidTransition}
+              onClick={handleSearchClick}
+            >
+              <img src={assets.search_icon} alt="" />
+            </motion.div>
+        </div>
 
-        {/* 4. Cart Icon Bubble */}
+        {/* Cart Icon */}
         <motion.div
           key={getTotalCartAmount()}
           className="glass-water-item icon-bubble"
-          whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.3)" }}
+          whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.8)" }}
           whileTap={{ scale: 0.9 }}
           transition={liquidTransition}
         >
@@ -98,7 +174,7 @@ const Navbar = ({ setShowLogin }) => {
                 <motion.div 
                   className="dot"
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  animate={{ scale: 1.2 }}
                   exit={{ scale: 0 }}
                   transition={{ type: "spring", stiffness: 500 }}
                 />
@@ -107,21 +183,20 @@ const Navbar = ({ setShowLogin }) => {
           </Link>
         </motion.div>
 
-        {/* 5. Sign In Button / Profile */}
+        {/* Login / Profile */}
         {!token ? (
           <motion.button 
-            className="glass-water-item" // Applied here
+            className="glass-water-item"
             onClick={() => setShowLogin(true)}
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.3)" }}
+            whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 76, 36, 0.1)" }}
             whileTap={{ scale: 0.95 }}
             transition={liquidTransition}
-            style={{ fontSize: '16px', fontWeight: 500 }} // Inline override to match button needs
+            style={{ fontWeight: 600, padding: '10px 30px' }}
           >
             sign in
           </motion.button>
         ) : (
           <div className='navbar-profile'>
-             {/* Profile Icon Bubble */}
             <motion.div 
               className="glass-water-item icon-bubble"
               whileHover={{ scale: 1.1 }}
@@ -129,7 +204,6 @@ const Navbar = ({ setShowLogin }) => {
             >
               <img src={assets.profile_icon} alt="" />
             </motion.div>
-            
             <ul className='navbar-profile-dropdown'>
               <li onClick={()=>navigate('/myorders')}> <img src={assets.bag_icon} alt="" /> <p>Orders</p></li>
               <hr />

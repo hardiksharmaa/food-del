@@ -8,11 +8,14 @@ const Footer = () => {
       <div className="footer-content">
         <div className="footer-content-left">
             <img src={assets.logo} alt="" />
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+            <p>Choose from a diverse menu featuring a delectable array of dishes crafted with the finest ingredients and culinary expertise. Our mission is to satisfy your cravings and elevate your dining experience, one delicious meal at a time.</p>
             <div className="footer-social-icons">
-                <img src={assets.facebook_icon} alt="" />
-                <img src={assets.twitter_icon} alt="" />
-                <img src={assets.linkedin_icon} alt="" />
+                <a href="https://www.facebook.com/whyhardikk/" target="_blank" rel="noopener noreferrer">
+                  <img src={assets.facebook_icon} alt="Facebook" />
+                </a>
+                <a href="https://www.linkedin.com/in/hardiksh121/" target="_blank" rel="noopener noreferrer">
+                  <img src={assets.linkedin_icon} alt="LinkedIn" />
+                </a>
             </div>
         </div>
         <div className="footer-content-center">
@@ -27,13 +30,13 @@ const Footer = () => {
         <div className="footer-content-right">
             <h2>GET IN TOUCH</h2>
             <ul>
-                <li>+1-212-456-7890</li>
-                <li>contact@tomato.com</li>
+                <li>+91-7889480969</li>
+                <li>hs489819@gmail.com</li>
             </ul>
         </div>
       </div>
       <hr />
-      <p className="footer-copyright">Copyright 2024 © Tomato.com - All Right Reserved.</p>
+      <p className="footer-copyright">Copyright 2024 © TheAntojitos.com - All Right Reserved.</p>
     </div>
   )
 }
