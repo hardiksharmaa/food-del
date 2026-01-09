@@ -6,11 +6,16 @@ import { StoreContext } from '../../Context/StoreContext'
 
 const FoodDisplay = ({category}) => {
 
-  const {food_list} = useContext(StoreContext);
+  // 1. Get searchTerm from Context
+  const { food_list, searchTerm } = useContext(StoreContext);
 
-  const filteredItems = food_list.filter((item) => 
-    category === "All" || category === item.category
-  );
+  // 2. Logic: Filter based on Category AND Search Term
+  const filteredItems = food_list.filter((item) => {
+    const matchesCategory = category === "All" || category === item.category;
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <motion.div 
@@ -24,7 +29,9 @@ const FoodDisplay = ({category}) => {
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6 }}
-      >Top dishes near you</motion.h2>
+      >
+        Top dishes near you
+      </motion.h2>
       <div className='food-display-list'>
         {filteredItems.map((item, index)=>{
           return (

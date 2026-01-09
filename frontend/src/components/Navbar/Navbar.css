@@ -1,85 +1,141 @@
+/* Navbar.css */
+
 .navbar {
     padding: 20px 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* Sticky positioning for better UX */
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .navbar .logo {
-    width: 150px;
+    width: 100px;
 }
 
+/* --- Menu Styling --- */
 .navbar-menu {
     display: flex;
     list-style: none;
-    gap: 20px;
+    gap: 15px; /* Adjusted gap for the pills */
     color: #49557E;
     font-size: 18px;
 }
 
-.navbar-menu .active {
-    padding-bottom: 2px;
-    border-bottom: 2px solid #49557E;
+/* --- THE PREMIUM GLASS EFFECT (New) --- */
+.glass-water-item {
+    position: relative;
+    background: rgba(255, 255, 255, 0.4); /* More visible glass */
+    backdrop-filter: blur(12px);           /* Stronger blur */
+    -webkit-backdrop-filter: blur(12px);   /* Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Crystalline border */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Soft, premium shadow */
+    border-radius: 50px;
+    padding: 10px 22px;
+    color: #49557E;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: box-shadow 0.3s ease;
+    overflow: hidden; /* Keeps the sliding shine inside */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Hover glow effect */
+.glass-water-item:hover {
+    box-shadow: 0 8px 25px rgba(255, 76, 36, 0.15); /* Tomato glow */
+    border-color: white;
+}
+
+/* Active Text needs to be white to contrast the red pill */
+.glass-water-item.active-text {
+    color: white !important;
+    border-color: transparent;
+}
+
+/* The sliding active background (Used by Framer Motion) */
+.active-pill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #ff6b6b 0%, #ff4757 100%); /* Tomato Gradient */
+    border-radius: 50px;
+    z-index: -1; /* Puts it behind the text */
+}
+
+/* --- Right Side Icons & Search --- */
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 15px; /* Adjusted for glass bubbles */
 }
 
-.navbar-search-icon{
-position: relative;
+/* Round bubbles for icons */
+.icon-bubble {
+    padding: 10px;
+    border-radius: 50%; /* Perfect circle */
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.navbar-search-icon .dot{
+/* Search Input Styling */
+.search-input-glass {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 76, 36, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+}
+
+.navbar-search-icon {
+    position: relative;
+    display: flex; /* Centers the inner icon */
+}
+
+.navbar-search-icon .dot {
     position: absolute;
     min-width: 10px;
     min-height: 10px;
     background-color: #FF4C24;
     border-radius: 5px;
-    top: -8px;
-    right: -8px;
+    top: -2px; /* Adjusted for bubble */
+    right: -2px;
 }
 
-.navbar-right button {
-    background: transparent;
-    font-size: 16px;
-    color: #49557E;
-    border: 1px solid #FF4C24;
-    padding: 10px 30px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.navbar-right button:hover {
-    background: #fff4f2;
-}
-
-.navbar-profile{
+/* --- Profile Dropdown Styling --- */
+.navbar-profile {
     position: relative;
-
 }
-.navbar-profile-dropdown{
+
+.navbar-profile-dropdown {
     position: absolute;
     display: none;
     right: 0;
     z-index: 1;
 }
-.navbar-profile-dropdown li{
+
+.navbar-profile-dropdown li {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
 }
-.navbar-profile-dropdown img{
+
+.navbar-profile-dropdown img {
     width: 20px;
 }
-.navbar-profile-dropdown li:hover{
+
+.navbar-profile-dropdown li:hover {
     color: #FF4C24;
 }
-.navbar-profile:hover .navbar-profile-dropdown{
+
+/* Show dropdown on hover */
+.navbar-profile:hover .navbar-profile-dropdown {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -90,12 +146,15 @@ position: relative;
     outline: 2px solid white;
     list-style: none;
 }
-.navbar-profile hr{
+
+.navbar-profile hr {
     background-color: gray;
     height: 1px;
     border: none;
 }
-@media (max-width:1050px) {
+
+/* --- Media Queries (Responsiveness) --- */
+@media (max-width: 1050px) {
     .navbar .logo {
         width: 140px;
     }
@@ -118,7 +177,7 @@ position: relative;
     }
 }
 
-@media (max-width:900px) {
+@media (max-width: 900px) {
     .navbar .logo {
         width: 120px;
     }
@@ -142,49 +201,8 @@ position: relative;
     }
 }
 
-@media (max-width:750px) {
+@media (max-width: 750px) {
     .navbar-menu {
         display: none;
     }
-}
-
-/* Navbar.css */
-
-/* The Glass/Water Style */
-.glass-water-item {
-  background: rgba(255, 255, 255, 0.1); /* Very transparent white */
-  backdrop-filter: blur(10px);           /* The "frosted glass" blur */
-  -webkit-backdrop-filter: blur(10px);   /* Safari support */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Shiny edge */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle depth */
-  border-radius: 50px;                   /* Pill/Droplet shape */
-  padding: 8px 20px;                     /* Spacing inside the bubble */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #49557E;                        /* Keep your text color */
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* Adjust the active state specifically for this new look */
-.navbar-menu .active {
-  background: rgba(255, 76, 36, 0.1); /* Faint orange tint */
-  border-color: rgba(255, 76, 36, 0.4);
-  /* Remove the old underline style if it conflicts */
-  padding-bottom: 8px; 
-  border-bottom: 1px solid rgba(255, 76, 36, 0.4);
-}
-
-/* Specific adjustment for the icons to make them round bubbles */
-.icon-bubble {
-  padding: 10px;
-  border-radius: 50%; /* Perfect circle */
-  width: 45px;
-  height: 45px;
-}
-
-/* Ensure the layout handles the new padding */
-.navbar-menu {
-  gap: 15px; /* Slightly reduce gap since items have padding now */
 }
