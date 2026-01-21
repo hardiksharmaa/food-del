@@ -2,10 +2,11 @@
     height: 34vw;
     margin: 30px auto;
     background: url('/header_img.png') no-repeat;
-    background-size:contain;
+    background-size: contain;
     position: relative;
     overflow: hidden;
     border-radius: 20px;
+    z-index: 1;
 }
 .header-gradient-overlay {
     position: absolute;
